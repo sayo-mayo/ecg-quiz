@@ -1,0 +1,263 @@
+<!-- INITIALISATION -->
+<!DOCTYPE html> 
+<html lang="en">
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> ECG </title>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- STYLING TIME -->
+<style>
+	:root {
+		--bg: #070b0e;
+		--bg-2: #0c1318;
+		--ink: #e7f5ef;
+		--ink-dim: #7d958c;
+		--red: #ff4d5e;
+		--trace: #00f5a0;
+		--trace-glow: rgba(0, 245, 160, 0.3);
+		--mono: 'IBM Plex Mono', monospace;
+		--sans: 'IBM Plex Sans', sans-serif;
+		--line: rgba(0, 245, 160, 0.55);
+		--grid-minor: rgba(0, 255, 153, 0.06);
+		--grid-major: rgba(0, 255, 153, 0.09);
+
+	}
+
+	* { margin: 0; padding: 0; box-sizing: border-box;}
+
+	body {
+		font-family: var(--sans);
+		color: var(--ink);
+		background: var(--bg);
+		background-image:
+			linear-gradient(var(--grid-minor) 1px, transparent 1px),
+			linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px),
+			linear-gradient(var(--grid-major) 1px, transparent 1px),
+			linear-gradient(90deg, var(--grid-major) 1px, transparent 1px);
+		background-size: 16px 16px, 16px 16px, 80px 80px, 80px 80px;
+		min-height: 100vh;
+	}
+
+	.screen { display: none; }
+	.screen.active {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	padding: 48px 24px;
+	}
+
+	#screen-knowledge, #screen-quiz { width: 100% }
+	#quizbody, #quizresult { width: 100%; max-width: 640px; margin: 0 auto; }
+
+
+	h1 {
+		font-family: var(--mono);
+		font-weight: 700;
+		letter-spacing: -0.01em;
+		margin-bottom: 24px;
+	}
+	#screen-home h1 { color: var(--trace); font-size: 2.6rem; }
+
+	#prompt {
+		font-size: 1.15rem;
+		font-weight: 500;
+		margin: 18px 0;
+		line-height: 1.4; 
+	}
+	#feedback, #score {
+		font-family: var(--mono);
+		font-size: 13px;
+		letter-spacing: 0.08em;
+		color: var(--ink-dim);
+		margin-top: 12px;
+	}
+
+	
+
+	button {
+		font-family: var(--mono);
+		font-size: 15px;
+		font-weight: 600;
+		letter-spacing: 0.03em;
+		color: var(--trace);
+		background: transparent;
+		border: 1.5px solid var(--trace);
+		border-radius: 4px;
+		padding: 14px 28px;
+		margin: 6px;
+		cursor: pointer;
+		transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+	}
+	button:hover {
+		transform: translateY(-2px); 
+box-shadow: 0 8px 24px -8px var(--trace-glow); 
+}
+
+
+	#screen-home button:first-of-type {
+		background: var(--trace);
+		color: #04130d;
+		box-shadow: 0 0 24px -6px var(--trace-glow);
+	}
+
+	#options { display: flex; flex-direction: column; gap:10px; }
+	#options button {
+		width: 100%;
+		text-align: left;
+		font-family: var(--sans);
+		font-weight: 400;
+		color: var(--ink);
+		background: var(--bg-2);
+		border: 1px solid var(--line);
+		margin:0;
+		padding: 16px 18px;
+	}
+
+	#options 	button:hover {
+		border-color: var(--trace); 
+transform: translateX(3px); 
+}
+#options.locked button { cursor: default; transform: none; }
+
+#options button.correct {
+	border-color: var(--trace);
+	background: rgba(0, 245, 160, 0.08);
+	color: var(--trace);
+}
+
+#options button.wrong {
+	border-color: var(--red);
+	background: rgba(255, 77, 94, 0.08);
+	color: var(--red);
+}
+
+
+</style>
+
+
+</head>
+<body>
+
+<!-- HOME SECTION -->
+<section id="screen-home" class="screen active">
+	<h1> ECG Quiz </h1>
+	<button onclick="show('quiz'); start()"> Play </button>
+	<button onclick="show('knowledge')"> Background Knowledge </button>
+</section>
+
+
+<!-- BACKGROUND KNOWLEDGE SECTION -->
+<section id="screen-knowledge" class="screen">
+	<h1> Background Knowledge </h1>
+	<p>[ video goes here will need to make later]</p>
+	<button onclick="show('home')"> Back </button>
+</section>
+
+
+<!-- QUIZ SECTION -->
+<section id="screen-quiz" class="screen">
+	<h1> Quiz </h1>
+	<div id="quizbody">
+<div id="ecg"> </div>
+<p id="prompt"></p>
+<div id="options"></div>
+<p id="feedback"></p>
+<p id="score"></p>	
+<button id="nextbtn" onclick="next()" style="display:none">Next</button>
+	</div>
+<div id="quizresult" style="display:none">
+	<p id="finalscore"></p>
+	<button onclick="start()"> Retry </button>
+</div>
+	<button onclick="show('home')"> Back </button>
+</section>
+
+
+
+<!-- SCRIPT SECTION -->
+<script>
+	function show(id) {
+		document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+		document.getElementById('screen-' + id).classList.add('active');
+		window.scrollTo(0, 0);
+	}
+
+	const questions = [
+		{ prompt: "?", options: ["Atrial fibrillation", "Ventricular fibrillation", "First-degree AV block", "Atrial flutter"], answer: 0 },
+{ prompt: "?",  options: ["Ventricular tachycardia", "Sinus bradycardia", "Atrial flutter", "Ventricular fibrillation"], answer: 3 },
+{ prompt: "?",  options: ["Third degree heart block", "First-degree AV block", "Atrial flutter", "Premature atrial contraction"], answer: 2 }, 
+{ prompt: "?",  options: ["First-degree AV block", "Ventricular tachycardia", "Sinus bradycardia", "Third-degree heart block"], answer: 3 },
+{ prompt: "?", options: ["Ventricular fibrillation", "Ventricular tachycardia", "Atrial fibrillation", "Sinus bradycardia"], answer: 1 },
+{ prompt: "?",  options: ["Premature atrial contraction", "Sinus tachycardia", "First-degree AV block", "Atrial flutter"], answer: 2 }
+];
+
+	let idx = 0, score = 0, answered = false;
+	
+	function start() {
+		idx =0; score = 0;
+		document.getElementById('quizbody').style.display = 'block';
+		document.getElementById('quizresult').style.display = 'none';
+		getquestion();
+	}
+
+	function getquestion() {
+		answered = false;
+		const q = questions[idx];
+		document.getElementById('prompt').textContent = q.prompt;
+		document.getElementById('feedback').textContent = '';
+		document.getElementById('score').textContent = 'Score: ' + score;
+		document.getElementById('nextbtn').style.display = 'none';
+		const opts = document.getElementById('options');
+		opts.innerHTML = '';
+		opts.classList.remove('locked');
+		q.options.forEach((text, i) => {
+			const b = document.createElement('button')
+			b.textContent = text;
+			b.onclick = () => choose(i);
+			opts.appendChild(b);
+		});
+	}
+
+	function choose(i) {
+		if (answered) return;
+		answered = true;
+		const q = questions[idx];
+
+		const opts = document.getElementById('options');
+		const buttons = opts.querySelectorAll('button');
+		opts.classList.add('locked');
+		buttons.forEach(b => b.disabled = true);
+		buttons[q.answer].classList.add('correct');
+		if (i === q.answer) {
+			score++;
+			document.getElementById('feedback').textContent = 'Correct';
+		} else {
+			buttons[i].classList.add('wrong');
+			document.getElementById('feedback').textContent = 'Wrong';
+		}
+document.getElementById('score').textContent = 'Score: ' + score;
+		document.getElementById('nextbtn').style.display = 'inline';
+	}
+
+
+
+	function next() {
+		if (idx < questions.length - 1) { idx ++; getquestion(); }
+		else { finish(); }
+	}
+
+	function finish() {
+		document.getElementById('quizbody').style.display = 'none';
+		document.getElementById('quizresult').style.display = 'block';
+		document.getElementById('finalscore').textContent = 'Final score: ' + score + ' out of ' + questions.length;
+	}
+
+</script>
+</body>
+</html>
