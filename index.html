@@ -125,7 +125,23 @@
 	font-weight: 300;
 	line-height: 1.55;
 }
-	.home-actions{
+
+.home-trace {
+	width: min(900px, 90vw);
+	height: 130px;
+	margin: 40px 0 8px;
+}
+
+.home-trace path {
+	fill: none;
+	stroke: var(--trace);
+	stroke-width: 2.4;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	filter: drop-shadow(0 0 6px var(--trace-glow));
+}
+
+	.home-actions {
 		display: flex;
 		gap: 18px;
 		margin-top:36px;
@@ -333,6 +349,7 @@ transform: translateX(3px);
 	<div class="monitor-label"><span class="blip"></span>PHYS20008 &middot; Cardiovascular Physiology</div>
 	<h1 class="title"> READING THE <br><span class="accent">ELECTROCARDIOGRAM</span></h1>
 	<p class="subtitle"> Diagnose the condition that would cause the aberrant ECG to be formed. </p>
+	<svg class="home-trace" viewBox="0 0 900 130" preserveAspectRatio="none" aria-hidden="true"><path id="homePath"></path></svg>
 	<div class="home-actions">
 		<button class="btn primary" onclick="show('quiz'); start()">
 			<svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -394,6 +411,43 @@ transform: translateX(3px);
 		document.getElementById('screen-' + id).classList.add('active');
 		window.scrollTo(0, 0);
 	}
+
+	function ecgBeat(x0, baseY, scale) {
+		const s = scale;
+		return [
+			[x0, baseY],
+			[x0+20, baseY],
+			[x0+30, baseY-8*s],
+			[x0+40, baseY],
+			[x0+55, baseY],
+			[x0+60, baseY],
+			[x0+66, baseY+6*s],
+			[x0+72, baseY-34*s],
+			[x0+78, baseY+12*s],
+			[x0+100, baseY],
+			[x0+118, baseY-14*s],
+			[x0+136, baseY],
+			[x0+150, baseY],
+		];
+	}
+
+	function ecgPath(width, baseY, beatW, scale) {
+		let pts = [], x = 0;
+		while (x < width) {
+			pts = pts.concat(ecgBeat(x, baseY, scale)); x += beatW;}
+		return 'M' + pts.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L');
+	}
+
+	(function () {
+		const p = document.getElementById('homePath');
+		p.setAttribute('d', ecgPath(900, 65, 150, 1));
+		const len = p.getTotalLength();
+		p.style.strokeDasharray = len;
+		p.animate(
+			[{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
+			{ duration: 4200, iterations: Infinity, easing: 'linear' }
+		);
+	})();
 
 	function videoEmbed(url) {
 		if (!url) return '';
