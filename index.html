@@ -62,7 +62,7 @@
 	justify-content: space-between;
 	align-items: center;
 	width: 100%;
-	margin-bottom: 20px;}
+	margin-bottom: 20px;
 	}
 	.qbar > * { margin: 0;}
 
@@ -372,7 +372,6 @@ transform: translateX(3px);
 <div id="ecg"> </div>
 <p id="prompt"></p>
 <div id="options"></div>
-<p id="feedback"></p>
 <div id="explanation"></div>
 <button id="nextbtn" onclick="next()" style="display:none">NEXT</button>	
 	</div>
@@ -439,7 +438,7 @@ explanation: "A long PR interval (gap between P wave and QRS complex) with every
 		const q = questions[idx];
 		document.getElementById('progressbar').style.width = (idx / questions.length * 100) + '%';
 		document.getElementById('qcount').textContent = 'ECG ' + (idx + 1) + ' / ' + questions.length;
-document.getElementById('score').textContent = 'SCORE' + score;
+document.getElementById('score').textContent = 'SCORE ' + score;
 		document.getElementById('ecg').innerHTML = '<img src="' + q.img + '" alt="ECG trace">';
 		document.getElementById('prompt').textContent = q.prompt;
 		const exp = document.getElementById('explanation');
