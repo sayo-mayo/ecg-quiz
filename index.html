@@ -274,6 +274,25 @@ transform: translateX(3px);
 
 .video-wrap video { width:100%; height:100%; border-radius: 4px;}
 
+	#quizresult { text-align: center; }
+	#finalscore {
+	font-family: var(--mono);
+	font-size: clamp(3rem, 12vw, 6rem);
+	font-weight: 700;
+	color: var(--trace);
+	line-height: 1;
+	text-shadow: 0 0 30px var(--trace-glow);
+	margin-bottom: 10px;
+	}
+
+	#finalsub {
+		font-family: var(--mono);
+		font-size: 13px;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-dim);
+		margin-bottom: 28px;
+	}
 </style>
 
 
@@ -321,6 +340,7 @@ transform: translateX(3px);
 	</div>
 <div id="quizresult" style="display:none">
 	<p id="finalscore"></p>
+	<p id="finalsub"></p>
 	<button onclick="start()"> Retry </button>
 </div>
 	<button onclick="show('home')"> Back </button>
@@ -434,7 +454,7 @@ document.getElementById('score').textContent = 'Score: ' + score;
 		document.getElementById('progressbar').style.width =  '100%';
 		document.getElementById('quizbody').style.display = 'none';
 		document.getElementById('quizresult').style.display = 'block';
-		document.getElementById('finalscore').textContent = 'Final score: ' + score + ' out of ' + questions.length;
+		document.getElementById('finalscore').textContent = score + ' / ' + questions.length;
 	}
 
 	renderknowledge();
