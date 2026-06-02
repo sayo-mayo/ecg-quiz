@@ -53,7 +53,7 @@
 	}
 
 	#screen-knowledge, #screen-quiz { width: 100% }
-	#quizbody, #quizresult { width: 100%; max-width: 640px; margin: 0 auto; }
+	#quizbody, #quizresult, #knowledge-video { width: 100%; max-width: 640px; margin: 0 auto; }
 
 
 	h1 {
@@ -163,6 +163,37 @@ transform: translateX(3px);
 	border-radius: 4px;
 	}
 
+	#explanation { display: none; }
+	#explanation.show {
+		display: block;
+		margin-top: 16px;
+		padding: 16px 18px;
+		border-left: 2px solid var(--trace);
+		background: var(--bg-2);
+		border-radius: 0 4px 4px 0;
+		line-height: 1.55;
+		font-weight: 300;
+	}
+	#explanation p { margin: 0; }
+
+	.video-wrap {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		margin-top: 12px;
+	}
+	
+	.video-wrap iframe {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+		border-radius: 4px;
+	}
+
+.video-wrap video { width=100%; height:100%; border-radius: 4px;}
+
 </style>
 
 
@@ -180,7 +211,7 @@ transform: translateX(3px);
 <!-- BACKGROUND KNOWLEDGE SECTION -->
 <section id="screen-knowledge" class="screen">
 	<h1> Background Knowledge </h1>
-	<p>[video goes here will need to make later]</p>
+	<div id="knowledge-video"></div>
 	<button onclick="show('home')"> Back </button>
 </section>
 
@@ -194,6 +225,7 @@ transform: translateX(3px);
 <p id="prompt"></p>
 <div id="options"></div>
 <p id="feedback"></p>
+<div id="explanation"></div>
 <p id="score"></p>	
 <button id="nextbtn" onclick="next()" style="display:none">Next</button>
 	</div>
@@ -214,12 +246,34 @@ transform: translateX(3px);
 		window.scrollTo(0, 0);
 	}
 
+	function videoEmbed(url) {
+		if (!url) return '';
+		if (/\.(mp4|webm|ogg)$/i.test(url)) {
+			return '<div class="video-wrap"><video controls src="' + url + '"></video></div>';
+		}
+		return '<div class="video-wrap"><iframe src="' + url + '" allowfullscreen></iframe></div>';
+	}
+
+	const knowledgeVideo = "";
+
+	function renderknowledge() {
+		document.getElementById('knowledge-video').innerHTML = knowledgeVideo ? videoEmbed(knowledgeVideo) : '<p> [pretend video is here] </p>';
+	}
+	
+
+
+
 	const questions = [
-		{ prompt: "Which complication corresponds with this ECG?", img: "img/afib.jpg", options: ["Atrial fibrillation", "Ventricular fibrillation", "First-degree AV block", "Atrial flutter"], answer: 0 },
-{ prompt: "Which complication corresponds with this ECG?", img: "img/vfib.jpg", options: ["Ventricular tachycardia", "Sinus bradycardia", "Atrial flutter", "Ventricular fibrillation"], answer: 3 },
-{ prompt: "Which complication corresponds with this ECG?", img: "img/aflutter.jpg", options: ["Third-degree heart block", "First-degree AV block", "Atrial flutter", "Premature atrial contraction"], answer: 2 }, 
-{ prompt: "Which complication corresponds with this ECG?", img: "img/third-degree-block.jpg", options: ["First-degree AV block", "Ventricular tachycardia", "Sinus bradycardia", "Third-degree heart block"], answer: 3 },
-{ prompt: "Which complication corresponds with this ECG?", img: "img/first-degree-block.jpg", options: ["Premature atrial contraction", "Sinus tachycardia", "First-degree AV block", "Atrial flutter"], answer: 2 }
+		{ prompt: "Which complication corresponds with this ECG?", img: "img/afib.jpg", options: ["Atrial fibrillation", "Ventricular fibrillation", "First-degree AV block", "Atrial flutter"], answer: 0,
+explanation: "A", video: "" },
+{ prompt: "Which complication corresponds with this ECG?", img: "img/vfib.jpg", options: ["Ventricular tachycardia", "Sinus bradycardia", "Atrial flutter", "Ventricular fibrillation"], answer: 3,
+explanation: "A", video: "" },
+{ prompt: "Which complication corresponds with this ECG?", img: "img/aflutter.jpg", options: ["Third-degree heart block", "First-degree AV block", "Atrial flutter", "Premature atrial contraction"], answer: 2,
+explanation: "A", video: "" }, 
+{ prompt: "Which complication corresponds with this ECG?", img: "img/third-degree-block.jpg", options: ["First-degree AV block", "Ventricular tachycardia", "Sinus bradycardia", "Third-degree heart block"], answer: 3,
+explanation: "A", video: "" },
+{ prompt: "Which complication corresponds with this ECG?", img: "img/first-degree-block.jpg", options: ["Premature atrial contraction", "Sinus tachycardia", "First-degree AV block", "Atrial flutter"], answer: 2,
+explanation: "A", video: "" }
 ];
 
 	let idx = 0, score = 0, answered = false;
@@ -238,6 +292,9 @@ transform: translateX(3px);
 		document.getElementById('ecg').innerHTML = '<img src="' + q.img + '" alt="ECG trace">';
 		document.getElementById('prompt').textContent = q.prompt;
 		document.getElementById('feedback').textContent = '';
+		const exp = document.getElementById('explanation');
+		exp.innerHTML = '';
+		exp.classList.remove('show');
 		document.getElementById('score').textContent = 'Score: ' + score;
 		document.getElementById('nextbtn').style.display = 'none';
 		const opts = document.getElementById('options');
@@ -269,6 +326,10 @@ transform: translateX(3px);
 			document.getElementById('feedback').textContent = 'Wrong';
 		}
 document.getElementById('score').textContent = 'Score: ' + score;
+		const exp = document.getElementById('explanation');
+		exp.innerHTML = '<p>' + q.explanation + '</p>' + videoEmbed(q.video);
+		exp.classList.add('show');
+
 		document.getElementById('nextbtn').style.display = 'inline';
 	}
 
@@ -286,9 +347,8 @@ document.getElementById('score').textContent = 'Score: ' + score;
 		document.getElementById('finalscore').textContent = 'Final score: ' + score + ' out of ' + questions.length;
 	}
 
+	renderknowledge();
+
 </script>
 </body>
 </html>
-
-
-
