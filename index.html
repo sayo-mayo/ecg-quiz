@@ -77,8 +77,25 @@
 		color: var(--ink-dim);
 		margin-top: 12px;
 	}
-
+ 	
+	#progress {
+	width: 100%;
+	height: auto;
+	background: var(--line);
+	margin-bottom: 24px;
+		border-radius: 4px;
+overflow:hidden;
+}	
 	
+	#progressbar {
+	display: block;
+width: 0%;
+	height: 100%;
+	background: var(--trace);
+	box-shadow: 0 0 10px var(--trace-glow);
+		transition: width 0.35s ease;
+}	
+
 
 	button {
 		font-family: var(--mono);
@@ -146,7 +163,6 @@ transform: translateX(3px);
 	border-radius: 4px;
 	}
 
-
 </style>
 
 
@@ -173,6 +189,7 @@ transform: translateX(3px);
 <section id="screen-quiz" class="screen">
 	<h1> Quiz </h1>
 	<div id="quizbody">
+		<div id="progress"><span id="progressbar"></span></div>
 <div id="ecg"> </div>
 <p id="prompt"></p>
 <div id="options"></div>
@@ -217,7 +234,8 @@ transform: translateX(3px);
 	function getquestion() {
 		answered = false;
 		const q = questions[idx];
-		document.getElementById('ecg').innerHTML = '<img src="' + q.img + ' "alt="ECG trace">';
+		document.getElementById('progressbar').style.width = (idx / questions.length * 100) + '%';
+		document.getElementById('ecg').innerHTML = '<img src="' + q.img + '" alt="ECG trace">';
 		document.getElementById('prompt').textContent = q.prompt;
 		document.getElementById('feedback').textContent = '';
 		document.getElementById('score').textContent = 'Score: ' + score;
@@ -262,6 +280,7 @@ document.getElementById('score').textContent = 'Score: ' + score;
 	}
 
 	function finish() {
+		document.getElementById('progressbar').style.width =  '100%';
 		document.getElementById('quizbody').style.display = 'none';
 		document.getElementById('quizresult').style.display = 'block';
 		document.getElementById('finalscore').textContent = 'Final score: ' + score + ' out of ' + questions.length;
