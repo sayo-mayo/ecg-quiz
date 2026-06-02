@@ -248,7 +248,7 @@ transform: translateX(3px);
 
 	function videoEmbed(url) {
 		if (!url) return '';
-		if (/\.(mp4|webm|ogg)$/i.test(url)) {
+		if (/\.(mp4)$/i.test(url)) {
 			return '<div class="video-wrap"><video controls src="' + url + '"></video></div>';
 		}
 		return '<div class="video-wrap"><iframe src="' + url + '" allowfullscreen></iframe></div>';
@@ -265,15 +265,15 @@ transform: translateX(3px);
 
 	const questions = [
 		{ prompt: "Which complication corresponds with this ECG?", img: "img/afib.jpg", options: ["Atrial fibrillation", "Ventricular fibrillation", "First-degree AV block", "Atrial flutter"], answer: 0,
-explanation: "A", video: "" },
+explanation: "Inconsistent timing of beats (specifically QRS complexes) and lack of clear, organised P waves is consistent with atrial fibrillation.", video: "" },
 { prompt: "Which complication corresponds with this ECG?", img: "img/vfib.jpg", options: ["Ventricular tachycardia", "Sinus bradycardia", "Atrial flutter", "Ventricular fibrillation"], answer: 3,
-explanation: "A", video: "" },
+explanation: "Absence of any recognisable QRS complexes and presence of a rapidly oscillating waveform is consistent with ventricular fibrillation.", video: "" },
 { prompt: "Which complication corresponds with this ECG?", img: "img/aflutter.jpg", options: ["Third-degree heart block", "First-degree AV block", "Atrial flutter", "Premature atrial contraction"], answer: 2,
-explanation: "A", video: "" }, 
+explanation: "Regularly spaced beats with a steady repeating sawtooth baseline wave is consistent with atrial flutter. ", video: "" }, 
 { prompt: "Which complication corresponds with this ECG?", img: "img/third-degree-block.jpg", options: ["First-degree AV block", "Ventricular tachycardia", "Sinus bradycardia", "Third-degree heart block"], answer: 3,
-explanation: "A", video: "" },
+explanation: "P waves and QRS complexes each holding their own rhythm without being fixed to each other is consistent with third-degree heart block. Note the QRS complex appears upside down due to the lead from which this ECG was recorded.", video: "" },
 { prompt: "Which complication corresponds with this ECG?", img: "img/first-degree-block.jpg", options: ["Premature atrial contraction", "Sinus tachycardia", "First-degree AV block", "Atrial flutter"], answer: 2,
-explanation: "A", video: "" }
+explanation: "A long PR interval (gap between P wave and QRS complex) with every P wave still conducting is consistent with first-degree AV block.", video: "" }
 ];
 
 	let idx = 0, score = 0, answered = false;
