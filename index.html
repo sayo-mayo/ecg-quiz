@@ -155,7 +155,7 @@ transform: translateX(3px);
 <!-- BACKGROUND KNOWLEDGE SECTION -->
 <section id="screen-knowledge" class="screen">
 	<h1> Background Knowledge </h1>
-	<p>[ video goes here will need to make later]</p>
+	<p>[video goes here will need to make later]</p>
 	<button onclick="show('home')"> Back </button>
 </section>
 
@@ -189,12 +189,11 @@ transform: translateX(3px);
 	}
 
 	const questions = [
-		{ prompt: "?", options: ["Atrial fibrillation", "Ventricular fibrillation", "First-degree AV block", "Atrial flutter"], answer: 0 },
-{ prompt: "?",  options: ["Ventricular tachycardia", "Sinus bradycardia", "Atrial flutter", "Ventricular fibrillation"], answer: 3 },
-{ prompt: "?",  options: ["Third degree heart block", "First-degree AV block", "Atrial flutter", "Premature atrial contraction"], answer: 2 }, 
-{ prompt: "?",  options: ["First-degree AV block", "Ventricular tachycardia", "Sinus bradycardia", "Third-degree heart block"], answer: 3 },
-{ prompt: "?", options: ["Ventricular fibrillation", "Ventricular tachycardia", "Atrial fibrillation", "Sinus bradycardia"], answer: 1 },
-{ prompt: "?",  options: ["Premature atrial contraction", "Sinus tachycardia", "First-degree AV block", "Atrial flutter"], answer: 2 }
+		{ prompt: "Which complication corresponds with this ECG?", img: "img/afib.jpg", options: ["Atrial fibrillation", "Ventricular fibrillation", "First-degree AV block", "Atrial flutter"], answer: 0 },
+{ prompt: "Which complication corresponds with this ECG?", img: "img/vfib.jpg", options: ["Ventricular tachycardia", "Sinus bradycardia", "Atrial flutter", "Ventricular fibrillation"], answer: 3 },
+{ prompt: "Which complication corresponds with this ECG?", img: "img/aflutter.jpg", options: ["Third degree heart block", "First-degree AV block", "Atrial flutter", "Premature atrial contraction"], answer: 2 }, 
+{ prompt: "Which complication corresponds with this ECG?", img: "img/third-degree-block.jpg", options: ["First-degree AV block", "Ventricular tachycardia", "Sinus bradycardia", "Third-degree heart block"], answer: 3 },
+{ prompt: "Which complication corresponds with this ECG?", img: "img/first-degree-block.jpg", options: ["Premature atrial contraction", "Sinus tachycardia", "First-degree AV block", "Atrial flutter"], answer: 2 }
 ];
 
 	let idx = 0, score = 0, answered = false;
