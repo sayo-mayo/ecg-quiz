@@ -208,6 +208,7 @@ transform: translateX(3px);
 	function getquestion() {
 		answered = false;
 		const q = questions[idx];
+		document.getElementById('ecg').innerHTML = '<img src=" ' + q.img + ' "alt="ECG trace">';
 		document.getElementById('prompt').textContent = q.prompt;
 		document.getElementById('feedback').textContent = '';
 		document.getElementById('score').textContent = 'Score: ' + score;
