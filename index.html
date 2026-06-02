@@ -136,7 +136,15 @@ transform: translateX(3px);
 	background: rgba(255, 77, 94, 0.08);
 	color: var(--red);
 }
-
+#ecg { margin: 12px 0; }
+#ecg img {
+	display: block;
+	width: 100%;
+	height: auto;
+	background: #fff;
+	border: 1px solid var(--line);
+	border-radius: 4px;
+	}
 
 </style>
 
@@ -191,7 +199,7 @@ transform: translateX(3px);
 	const questions = [
 		{ prompt: "Which complication corresponds with this ECG?", img: "img/afib.jpg", options: ["Atrial fibrillation", "Ventricular fibrillation", "First-degree AV block", "Atrial flutter"], answer: 0 },
 { prompt: "Which complication corresponds with this ECG?", img: "img/vfib.jpg", options: ["Ventricular tachycardia", "Sinus bradycardia", "Atrial flutter", "Ventricular fibrillation"], answer: 3 },
-{ prompt: "Which complication corresponds with this ECG?", img: "img/aflutter.jpg", options: ["Third degree heart block", "First-degree AV block", "Atrial flutter", "Premature atrial contraction"], answer: 2 }, 
+{ prompt: "Which complication corresponds with this ECG?", img: "img/aflutter.jpg", options: ["Third-degree heart block", "First-degree AV block", "Atrial flutter", "Premature atrial contraction"], answer: 2 }, 
 { prompt: "Which complication corresponds with this ECG?", img: "img/third-degree-block.jpg", options: ["First-degree AV block", "Ventricular tachycardia", "Sinus bradycardia", "Third-degree heart block"], answer: 3 },
 { prompt: "Which complication corresponds with this ECG?", img: "img/first-degree-block.jpg", options: ["Premature atrial contraction", "Sinus tachycardia", "First-degree AV block", "Atrial flutter"], answer: 2 }
 ];
@@ -208,7 +216,7 @@ transform: translateX(3px);
 	function getquestion() {
 		answered = false;
 		const q = questions[idx];
-		document.getElementById('ecg').innerHTML = '<img src=" ' + q.img + ' "alt="ECG trace">';
+		document.getElementById('ecg').innerHTML = '<img src="' + q.img + ' "alt="ECG trace">';
 		document.getElementById('prompt').textContent = q.prompt;
 		document.getElementById('feedback').textContent = '';
 		document.getElementById('score').textContent = 'Score: ' + score;
