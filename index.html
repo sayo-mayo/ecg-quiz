@@ -409,6 +409,7 @@ transform: translateX(3px);
 	function show(id) {
 		document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
 		document.getElementById('screen-' + id).classList.add('active');
+		document.querySelectorAll('video').forEach(v => v.pause());
 		window.scrollTo(0, 0);
 	}
 
